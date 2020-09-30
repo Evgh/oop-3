@@ -1,151 +1,243 @@
 ﻿using System;
+using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 
-namespace oop_3
+partial class Abiturient
 {
-    class Abiturient
+    public static int Amount = 0;
+    const int DEFAULT_MARKS_AMOUNT = 3;
+
+    readonly int _id;
+    int[] _marks;
+    string _name;
+    string _surname;
+    string _father;
+    string _adress;
+    string _phone;
+
+    public int Id
     {
-        public static int Amount;
-        static int DEFAULT_MARKS_AMOUNT = 3;
+        get { return _id; }
+    }
 
-        int _id;
-        int[] _marks;
-        string _name;
-        string _surname;
-        string _father;
-        string _adress;
-        string _phone;  
-
-        public int Id
+    public int[] Marks
+    {
+        get
         {
-            get { return _id; } // ограничение доступа по set по заданию 
+            return _marks;
         }
-
-        public int[] Marks // ограничение доступа по set по заданию x2
+        set
         {
-            get
-            {
-                return _marks;
-            }
+            _marks = value;
         }
+    }
 
-        public string Name
+    public string Name
+    {
+        get
         {
-            get
-            {
-                return _name;
-            }
-            set
-            {
-                _name = value;
-            }
+            return _name;
         }
-
-        public string Surname
+        set
         {
-            get
-            {
-                return _surname;
-            }
-            set
-            {
-                _surname = value;
-            }
+            _name = value;
         }
+    }
 
-        public string Father
+    public string Surname
+    {
+        get
         {
-            get
-            {
-                return _father;
-            }
-            set
-            {
-                _father = value;
-            }
-        }   
-        
-        public string Adress
-        {
-            get
-            {
-                return _adress;
-            }
-            set
-            {
-                _adress = value;
-            }
+            return _surname;
         }
-
-        public string Phone
+        set
         {
-            get
-            {
-                return _phone;
-            }
-            set
-            {
-                _phone = value;
-            }
+            _surname = value;
         }
+    }
 
-
-        static Abiturient()
+    public string Father
+    {
+        get
         {
-            Console.WriteLine("Создан первый абитуриент");
-            Amount = 1;
+            return _father;
         }
-
-        public Abiturient() : this(0) {}
-        public Abiturient(int[] marks, string name, string surname) : this(0, marks, name, surname) {}
-        public Abiturient(int id, int[] marks = null, string name = "Kolya", string surname = "Bovkun", string father = "Fatherless", string adress = "BGTU", string phone = "911") : this (id, marks, name, surname, father, adress, phone, 0) {}
-        Abiturient (int id, int[] marks, string name, string surname, string father, string adress, string phone, int a)
+        set
         {
-            Random rrr = new Random();
-            _id = rrr.Next()*Amount;
+            _father = value;
+        }
+    }
 
-            if (marks != null)
+    public string Adress
+    {
+        get
+        {
+            return _adress;
+        }
+        set
+        {
+            _adress = value;
+        }
+    }
+
+    public string Phone
+    {
+        get
+        {
+            return _phone;
+        }
+        set
+        {
+            bool flag = true;
+            if (value != null)
             {
-                _marks = marks;
+                for (int i = 0; i < value.Length; i++)
+                {
+                    if ((value[i] >= 48 && value[i] <= 57) || value[i] == 32 || value[i] == 43 || value[i] == 45)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        flag = false;
+                        break;
+                    }
+                }
             }
             else
             {
-                _marks = new int[DEFAULT_MARKS_AMOUNT];
-            };
-
-            _name = name;
-            _surname = surname;
-            _father = father;
-            _adress = adress;
-
-            bool flag = true;
-            for (int i = 0; i < phone.Length; i++)
-            {
-                if ((phone[i] >= 48 && phone[i] <= 57) || phone[i] == 32 || phone[i] == 43 || phone[i] == 45)
-                {
-                    continue;
-                }
-                else
-                {
-                    flag = false;
-                    break;
-                }
+                flag = false;
             }
-            _phone = flag ? phone : "911";
 
-            Amount++;
+            if (flag)
+            {
+                _phone = value;
+            }
+
         }
     }
-    class Program
+
+    static Abiturient()
     {
-        static void Main(string[] args)
-        {
-            Abiturient Anton = new Abiturient(666);
-            Abiturient Kolya = new Abiturient();
-
-            Console.WriteLine(Anton.Id + " " + Kolya.Id + " "+ Anton.Name + " " + Abiturient.Amount);
-
-        }
+        Console.WriteLine("Создан первый абитуриент");
+        Amount = 0;
     }
- 
+
+    public Abiturient() : this(null) { }
+    public Abiturient(int[] marks, string name, string surname) : this(marks, name, surname, null) { }
+    public Abiturient(int[] marks = null, string name = "Kolya", string surname = "Bovkun", string father = "Fatherless", string adress = "BGTU", string phone = "911") : this(10, marks, name, surname, father, adress, phone) { }
+    Abiturient(int id, int[] marks, string name, string surname, string father, string adress, string phone)
+    {
+        Random rrr = new Random();
+        _id = rrr.Next() * Amount;
+
+        if (marks != null)
+        {
+            Marks = marks;
+        }
+        else
+        {
+            Marks = new int[DEFAULT_MARKS_AMOUNT];
+        };
+
+        Name = name;
+        Surname = surname;
+        Father = father;
+        Adress = adress;
+        Phone = phone;
+        Amount++;
+    }
+
+
+    public override bool Equals(object obj)
+    {
+        if (obj == null || GetType() != obj.GetType())
+        {
+            return false;
+        }
+        Abiturient person = (Abiturient)obj;
+        bool flag;
+        flag = (Name == person.Name) && (Surname == person.Surname) && (Father == person.Father) && (Adress == person.Adress) && (Phone == person.Phone) && (Marks.Length == person.Marks.Length);
+
+        for (int i = 0; i < Marks.Length && flag; i++)
+        {
+            flag = flag && (Marks[i] == person.Marks[i]);
+        }
+        return flag;
+    }
+
+    public override int GetHashCode()
+    {
+        return Id;
+    }
+
+    public override string ToString()
+    {
+        string marks = "";
+        foreach (int x in Marks)
+        {
+            marks += x.ToString() + " ";
+        }
+
+        return Id.ToString() + " " + Name + " " + Surname + " " + Father + " " + Adress + " " + Phone + " " + marks;
+    }
+
+    public static int GetAmount()
+    {
+        return Amount;
+    }
+    public double GetOverage()
+    {
+        double num = 0; 
+        foreach (int x in Marks)
+        {
+            num += x;
+        }
+        return num / Marks.Length;
+    }
+
+    public int GetMinMark()
+    {
+        int min = Marks[0];
+        foreach(int x in Marks)
+        {
+            min = x < min ? x : min;
+        }
+        return min;
+    }
+
+    public int GetMaxMark()
+    {
+        int max = Marks[0];
+        foreach (int x in Marks)
+        {
+            max = x > max ? x : max;
+        }
+        return max;
+    }
+
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        int[] marks = { 5, 5, 10};
+        
+        Abiturient Kolya = new Abiturient();
+        Abiturient Nastya = new Abiturient(marks, "Nastya", "S");
+        Abiturient Anton = new Abiturient(marks, "Anton", "Lityagin");
+
+        Anton.Phone = "Gertsne";
+        
+
+
+
+        Console.WriteLine(Nastya.Equals(Kolya) + "\n" + Anton.ToString());
+
+
+
+        Abiturient.Hello();
+
+    }
 }
