@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Runtime.InteropServices.ComTypes;
 
 partial class Abiturient
@@ -170,6 +171,7 @@ class Program
         Console.WriteLine("What Nastya's mark is highest? - " + nastya.GetMaxMark());
         Console.WriteLine();
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         Abiturient[] friends = new Abiturient[Abiturient.Amount];
         friends[0] = defaultA;
@@ -205,7 +207,12 @@ class Program
         }
         Console.WriteLine();
 
-        Abiturient.Hello();
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        int[] arr = { 4, 4, 0 };
+        string Name = "Anton";
+        var surdov = new {Id = 0, Marks = arr, Name, Surname = "Surdov", Father = "Loh", Adress = "Army", Phone = "911"};
+
+        Console.WriteLine(surdov.ToString());
     }
 }
