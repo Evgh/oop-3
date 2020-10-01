@@ -10,78 +10,19 @@ partial class Abiturient
     const int DEFAULT_MARKS_AMOUNT = 3;
 
     readonly int _id;
-    int[] _marks;
+/*    int[] _marks;
     string _name;
     string _surname;
     string _father;
-    string _adress;
+    string _adress;*/
     string _phone;
 
-    public int Id
-    {
-        get { return _id; }
-    }
-
-    public int[] Marks
-    {
-        get
-        {
-            return _marks;
-        }
-        set
-        {
-            _marks = value;
-        }
-    }
-
-    public string Name
-    {
-        get
-        {
-            return _name;
-        }
-        set
-        {
-            _name = value;
-        }
-    }
-
-    public string Surname
-    {
-        get
-        {
-            return _surname;
-        }
-        set
-        {
-            _surname = value;
-        }
-    }
-
-    public string Father
-    {
-        get
-        {
-            return _father;
-        }
-        set
-        {
-            _father = value;
-        }
-    }
-
-    public string Adress
-    {
-        get
-        {
-            return _adress;
-        }
-        set
-        {
-            _adress = value;
-        }
-    }
-
+    public int Id { get; }
+    public int[] Marks { get; set; }
+    public string Name { get; set; }
+    public string Surname { get; set; }
+    public string Father { get; set; }
+    public string Adress { get; set; }
     public string Phone
     {
         get
