@@ -5,6 +5,7 @@ using System.Runtime.InteropServices.ComTypes;
 partial class Abiturient
 {
     public static int Amount = 0;
+    static int hashNum;
     const int DEFAULT_MARKS_AMOUNT = 3;
 
     readonly int _id;
@@ -119,17 +120,17 @@ partial class Abiturient
 
     static Abiturient()
     {
-        Console.WriteLine("Создан первый абитуриент");
         Amount = 0;
+        Random rrr = new Random();
+        hashNum = rrr.Next();
     }
 
     public Abiturient() : this(null) { }
-    public Abiturient(int[] marks, string name, string surname) : this(marks, name, surname, null) { }
+    public Abiturient(string name, string surname, int[] marks) : this(marks, name, surname, null, null, null) { }
     public Abiturient(int[] marks = null, string name = "Kolya", string surname = "Bovkun", string father = "Fatherless", string adress = "BGTU", string phone = "911") : this(10, marks, name, surname, father, adress, phone) { }
     Abiturient(int id, int[] marks, string name, string surname, string father, string adress, string phone)
     {
-        Random rrr = new Random();
-        _id = rrr.Next() * Amount;
+        _id = hashNum+Amount;
 
         if (marks != null)
         {
@@ -148,94 +149,61 @@ partial class Abiturient
         Amount++;
     }
 
-
-    public override bool Equals(object obj)
-    {
-        if (obj == null || GetType() != obj.GetType())
-        {
-            return false;
-        }
-        Abiturient person = (Abiturient)obj;
-        bool flag;
-        flag = (Name == person.Name) && (Surname == person.Surname) && (Father == person.Father) && (Adress == person.Adress) && (Phone == person.Phone) && (Marks.Length == person.Marks.Length);
-
-        for (int i = 0; i < Marks.Length && flag; i++)
-        {
-            flag = flag && (Marks[i] == person.Marks[i]);
-        }
-        return flag;
-    }
-
-    public override int GetHashCode()
-    {
-        return Id;
-    }
-
-    public override string ToString()
-    {
-        string marks = "";
-        foreach (int x in Marks)
-        {
-            marks += x.ToString() + " ";
-        }
-
-        return Id.ToString() + " " + Name + " " + Surname + " " + Father + " " + Adress + " " + Phone + " " + marks;
-    }
-
-    public static int GetAmount()
-    {
-        return Amount;
-    }
-    public double GetOverage()
-    {
-        double num = 0; 
-        foreach (int x in Marks)
-        {
-            num += x;
-        }
-        return num / Marks.Length;
-    }
-
-    public int GetMinMark()
-    {
-        int min = Marks[0];
-        foreach(int x in Marks)
-        {
-            min = x < min ? x : min;
-        }
-        return min;
-    }
-
-    public int GetMaxMark()
-    {
-        int max = Marks[0];
-        foreach (int x in Marks)
-        {
-            max = x > max ? x : max;
-        }
-        return max;
-    }
-
 }
 
 class Program
 {
     static void Main(string[] args)
     {
-        int[] marks = { 5, 5, 10};
-        
-        Abiturient Kolya = new Abiturient();
-        Abiturient Nastya = new Abiturient(marks, "Nastya", "S");
-        Abiturient Anton = new Abiturient(marks, "Anton", "Lityagin");
+        int[] antonMarks = { 5, 7, 10 };
+        int[] nastyaMarks = { 5, 5, 9 };
+        int[] denisMarks = { 9, 9, 9 };
 
-        Anton.Phone = "Gertsne";
-        
+        Abiturient defaultA = new Abiturient();
+        Abiturient anton = new Abiturient("Anton", "Lityagin", antonMarks);        
+        Abiturient nastya = new Abiturient(nastyaMarks, "Nastya", "Pnevmoniya");
+        Abiturient denis = new Abiturient(denisMarks, "Denis", "Bozhko", "Orlovich", "Brest", "Sss");
+
+        Console.WriteLine(defaultA.ToString() + "\n" + anton.ToString() + "\n" + nastya.ToString() + "\n" + denis.ToString() + "\n");
+        Console.WriteLine("Doues Anton equals Denis? - " + anton.Equals(denis));
+        Console.WriteLine("What type has default abiturient? - " + defaultA.GetType());
+        Console.WriteLine("What Nastya's mark is highest? - " + nastya.GetMaxMark());
+        Console.WriteLine();
 
 
+        Abiturient[] friends = new Abiturient[Abiturient.Amount];
+        friends[0] = defaultA;
+        friends[1] = anton;
+        friends[2] = nastya;
+        friends[3] = denis;
 
-        Console.WriteLine(Nastya.Equals(Kolya) + "\n" + Anton.ToString());
+        Console.WriteLine("\tThey have bad marks");
+        foreach(Abiturient person in friends)
+        {
+            double sum;
+            bool isGood = true;
+            person.GetOverage(out sum, ref isGood);
 
+            if (!isGood){
+                Console.WriteLine(person.ToString());
+            }
+        }
+        Console.WriteLine();
 
+        double aim = 20;
+        Console.WriteLine($"\tThey're score >= {aim}");
+        foreach (Abiturient person in friends)
+        {
+            bool isGood = true;
+            double sum;
+            person.GetOverage(out sum, ref isGood);
+
+            if(sum >= aim)
+            {
+                Console.WriteLine(person.ToString());
+            }
+        }
+        Console.WriteLine();
 
         Abiturient.Hello();
 
