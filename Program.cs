@@ -10,11 +10,6 @@ partial class Abiturient
     const int DEFAULT_MARKS_AMOUNT = 3;
 
     readonly int _id;
-/*    int[] _marks;
-    string _name;
-    string _surname;
-    string _father;
-    string _adress;*/
     string _phone;
 
     public int Id { get; }
