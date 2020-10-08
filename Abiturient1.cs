@@ -9,23 +9,26 @@ partial class Abiturient
 
     public override bool Equals(object obj)
     {
-        if (obj == null || GetType() != obj.GetType())
-        {
-            return false;
-        }
-        Abiturient person = (Abiturient)obj;
-        bool flag;
-        flag = (Name == person.Name) && (Surname == person.Surname) && (Father == person.Father) && (Adress == person.Adress) && (Phone == person.Phone) && (Marks.Length == person.Marks.Length);
-
-        for (int i = 0; i < Marks.Length && flag; i++)
-        {
-            flag = flag && (Marks[i] == person.Marks[i]);
-        }
-        return flag;
+        return this.GetHashCode() == obj.GetHashCode();
     }
     public override int GetHashCode()
     {
-        return Id;
+        int hash = hashNum;
+        hash = Name != null ? Name.GetHashCode() : hash;
+        hash = Surname != null ? hash * Surname.GetHashCode() : hash;
+        hash = Father != null ? hash * Father.GetHashCode() : hash;
+        hash = Adress != null ? hash * Adress.GetHashCode() : hash;
+        hash = Phone != null ? hash * Phone.GetHashCode() : hash;
+
+        if (Marks != null)
+        {
+            hash += Marks.Length;
+            foreach(int x in Marks) 
+            {
+                hash += x;
+            }
+        }
+        return  hash;
     }
 
     public override string ToString()
